@@ -1,7 +1,7 @@
 #include <SDL2/SDL.h>
 #include <random>
 
-int main() {
+int main(int argc, char* argv[]) {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         return 1;
     }
@@ -56,6 +56,7 @@ int main() {
         }
 
         SDL_SetRenderDrawColor(renderer, r, g, b, 255);
+        SDL_RenderDrawPoint(renderer, x, y);
         SDL_RenderPresent(renderer);
 
         if (x > 50 || x < 0 || y > 50 || y < 0) {
@@ -63,7 +64,7 @@ int main() {
             y = 25;
         }
 
-        SDL_Delay(1000);
+        
     }
 
     SDL_DestroyRenderer(renderer);
