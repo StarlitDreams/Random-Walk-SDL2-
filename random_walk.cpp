@@ -5,6 +5,7 @@ int main(int argc, char* argv[]) {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         return 1;
     }
+
     SDL_Window* window = nullptr;
     SDL_Renderer* renderer = nullptr;
 
@@ -12,6 +13,7 @@ int main(int argc, char* argv[]) {
         SDL_Quit();
         return 1;
     }
+
     SDL_RenderSetScale(renderer, 20, 20);
 
     int x{25};
@@ -20,7 +22,15 @@ int main(int argc, char* argv[]) {
     std::random_device dev;
     std::uniform_int_distribution<uint8_t> nd(0, 3);
 
-    while (true) {
+    bool running = true;
+    while (running) {
+        SDL_Event event;
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) {
+                running = false;
+            }
+        }
+
         uint8_t dir = nd(dev);
         Uint8 r, g, b;
 
@@ -55,16 +65,16 @@ int main(int argc, char* argv[]) {
                 break;
         }
 
-        SDL_SetRenderDrawColor(renderer, r, g, b, 255);
-        SDL_RenderDrawPoint(renderer, x, y);
-        SDL_RenderPresent(renderer);
+        if (x >= 0 && x <= 50 && y >= 0 && y <= 50) {
+            SDL_SetRenderDrawColor(renderer, r, g, b, 255);
+            SDL_RenderDrawPoint(renderer, x, y);
+            SDL_RenderPresent(renderer);
+        }
 
         if (x > 50 || x < 0 || y > 50 || y < 0) {
             x = 25;
             y = 25;
         }
-
-        
     }
 
     SDL_DestroyRenderer(renderer);
